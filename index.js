@@ -69,8 +69,14 @@ plov.addProduct(rice, 150);
 plov.addProduct(onion, 25);
 plov.addProduct(carrot, 25);
 
+const gyudon = new Dish('Гюдон');
+plov.addProduct(meat, 100);
+plov.addProduct(rice, 150);
+
 const calculator = new CaloriesCalculator();
 calculator.addDish(plov);
+calculator.addDish(gyudon);
+
 const calories = calculator.getTotalCalories();
 console.log(calories); // должно вывести 373.25
 
