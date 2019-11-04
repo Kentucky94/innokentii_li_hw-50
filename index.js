@@ -18,40 +18,51 @@ class Dish{
 class CaloriesCalculator{
     constructor(){
         this.totalCalories = 0;
+        this.dishes = [];
         this.infos = [];
     }
 
     addDish(dish){
-        let total = 0;
-
-        const products = dish.products;
-        for(const product of products){
-            const productWeight = product[1];
-            const productCalories = product[2];
-            const productTotal = productCalories * productWeight / 100;
-            this.totalCalories += productTotal;
-
-            total += productTotal;
-        }
-
-        let dishInfo = dish.title + ' 1 порция, ' + total;
-
-        for(const product of products){
-            const productTitle = product[0];
-            const productWeight = product[1];
-            const productCalories = product[2];
-
-            dishInfo += '\n' + productTitle + ', ' + productWeight + ' гр., ' + productCalories + ' ккал.';
-        }
-
-        this.infos.push(dishInfo);
+        this.dishes.push([dish.title, dish.products]);
     }
 
     getTotalCalories(){
+        for (const dish of this.dishes){
+            for(const product of dish[1]){
+                const productWeight = product[1];
+                const productCalories = product[2];
+                this.totalCalories += (productWeight * productCalories / 100);
+            }
+        }
         return this.totalCalories;
     }
 
     getAllDishesInfo(){
+        for (const dish of this.dishes){
+            const dishTitle = dish[0];
+            let dishCalories = 0;
+
+            for(const product of dish[1]){
+                const productWeight = product[1];
+                const productCalories = product[2];
+                dishCalories += (productWeight * productCalories / 100);
+            }
+
+            let dishInfo = dishTitle + ' 1 порция, ' + dishCalories + ' ккал.';
+
+            for(const product of dish[1]){
+                const productTitle = product[0];
+                const productWeight = product[1];
+                const productCalories = product[2];
+
+                dishInfo += '\n' + productTitle + ', ' + productWeight + ' гр., ' + productCalories + ' ккал.';
+            }
+
+            dishInfo += '\n';
+
+            this.infos.push(dishInfo);
+        }
+
         for(const info of this.infos){
             console.log(info);
         }
@@ -69,13 +80,13 @@ plov.addProduct(rice, 150);
 plov.addProduct(onion, 25);
 plov.addProduct(carrot, 25);
 
-const gyudon = new Dish('Гюдон');
-plov.addProduct(meat, 100);
-plov.addProduct(rice, 150);
+const ragou = new Dish('Рагу');
+ragou.addProduct(meat, 100);
+ragou.addProduct(rice, 150);
 
 const calculator = new CaloriesCalculator();
 calculator.addDish(plov);
-calculator.addDish(gyudon);
+calculator.addDish(ragou);
 
 const calories = calculator.getTotalCalories();
 console.log(calories); // должно вывести 373.25
